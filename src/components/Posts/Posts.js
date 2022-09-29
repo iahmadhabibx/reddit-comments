@@ -1,6 +1,5 @@
 import React from "react";
 import Card from "../Card/Card";
-import Comments from "../Comments/Comments";
 import posts from "./posts-dummy";
 import './posts.css';
 

@@ -1,0 +1,19 @@
+.comment-post {
+    display: inline-flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.comment-post textarea {
+    resize: none;
+    padding: 5px;
+    height: 40px;
+}
+
+.comment-post button {
+    cursor: pointer;
+    background-color: blueviolet;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+}

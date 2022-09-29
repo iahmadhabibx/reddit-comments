@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import Comments from '../Comments/Comments';
 import './card.css';
 
 const Card = ({ post }) => {
+    const [showTextArea, setShowTextArea] = useState(false);
+
     return (
         <div className="card">
             <header>
@@ -12,7 +15,8 @@ const Card = ({ post }) => {
                 <img src={post.media} alt={post.title} />
             </aside>
             <section className='comments'>
-                <Comments />
+                <button onClick={()=>setShowTextArea(!showTextArea)}>Show Comments</button>
+                <Comments postId={post.id} showTextArea={showTextArea} />
             </section>
         </div>
     );
