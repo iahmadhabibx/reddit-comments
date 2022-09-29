@@ -1,3 +1,4 @@
+import Comments from '../Comments/Comments';
 import './card.css';
 
 const Card = ({ post }) => {
@@ -10,6 +11,9 @@ const Card = ({ post }) => {
             <aside>
                 <img src={post.media} alt={post.title} />
             </aside>
+            <section className='comments'>
+                <Comments />
+            </section>
         </div>
     );
 };
