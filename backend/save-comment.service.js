@@ -1,7 +1,7 @@
 const { Comment } = require("./model");
 
-const commentSave = (comment) => {
-    return new Promise((resolve, reject) => {
+const commentSave = async (comment) => {
+    return new Promise(async (resolve, reject) => {
         try {
             const doc = new Comment(comment);
             const savedComment = await doc.save();
@@ -11,10 +11,17 @@ const commentSave = (comment) => {
         }
     });
 }
-const updateComment = (parentId, childComment) => {
-    const doc = await Comment.findByIdAndUpdate(parentId,
-        { $push: { children: childComment._id  } }
-    )
+const updateComment = async (parentId, childComment) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const doc = await Comment.findByIdAndUpdate(parentId,
+                { $push: { children: childComment._id } }, { new: true }
+            );
+            resolve(doc);
+        } catch (error) {
+            reject(error)
+        }
+    })
 }
 
-module.exports = { commentSave }
+module.exports = { commentSave, updateComment }

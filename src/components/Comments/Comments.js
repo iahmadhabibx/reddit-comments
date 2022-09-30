@@ -5,7 +5,7 @@ import './comments.css';
 import Comment from "../Comment/Comment";
 import onPostCommentReply from "../apis/reply-comment.api";
 
-const Comments = ({ postId, showTextArea }) => {
+const Comments = ({ postId, showTextArea, toggleCommentBox }) => {
     const [commentsList, setCommentsList] = useState([]);
     const [toggleReplyBox, setToggleReplyBox] = useState(false);
     const textArea = useRef();
@@ -34,6 +34,7 @@ const Comments = ({ postId, showTextArea }) => {
             }
             await onPostComment(body);
             textArea.current.value = "";
+            toggleCommentBox();
         } catch (error) {
         } finally {
             getComments();
@@ -54,6 +55,7 @@ const Comments = ({ postId, showTextArea }) => {
             }
             await onPostCommentReply(body);
             textArea.current.value = "";
+            toggleCommentBox();
         } catch (error) {
         } finally {
             getComments();

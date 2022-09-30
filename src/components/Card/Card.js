@@ -16,7 +16,7 @@ const Card = ({ post }) => {
             </aside>
             <section className='comments'>
                 <button onClick={()=>setShowTextArea(!showTextArea)}>Show Comments</button>
-                <Comments postId={post.id} showTextArea={showTextArea} />
+                <Comments postId={post.id} showTextArea={showTextArea} toggleCommentBox={()=>setShowTextArea(!setShowTextArea)} />
             </section>
         </div>
     );

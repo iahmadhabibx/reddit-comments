@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: '*' }));
 const { Comment } = require("./model");
-const { commentSave } = require("./save-comment.service");
+const { commentSave, updateComment } = require("./save-comment.service");
 
 app.post("/comment", async (req, res, next) => {
     try {
