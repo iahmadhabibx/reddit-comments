@@ -2,10 +2,14 @@ import React, { useLayoutEffect, useRef, useState } from "react";
 import onPostComment from "../apis/post-comment.api";
 import getCommentsByID from "../apis/comment.api";
 import './comments.css';
+import Comment from "../Comment/Comment";
+import onPostCommentReply from "../apis/reply-comment.api";
 
 const Comments = ({ postId, showTextArea }) => {
     const [commentsList, setCommentsList] = useState([]);
+    const [toggleReplyBox, setToggleReplyBox] = useState(false);
     const textArea = useRef();
+    const textAreaReply = useRef();
 
     useLayoutEffect(() => {
         getComments();
@@ -24,9 +28,9 @@ const Comments = ({ postId, showTextArea }) => {
                 comment: textArea.current.value,
                 postId,
                 postedBy: "Guest",
-                hasChildren: false,
                 children: [],
-                isRemoved: false
+                isRemoved: false,
+                parentId: null
             }
             await onPostComment(body);
             textArea.current.value = "";
@@ -34,6 +38,31 @@ const Comments = ({ postId, showTextArea }) => {
         } finally {
             getComments();
         }
+    }
+
+    const postCommentReply = async () => {
+        try {
+            if (textArea.current.value == "")
+                return alert("Enter something in your comment");
+            const body = {
+                comment: textArea.current.value,
+                postId,
+                postedBy: "Guest",
+                children: [],
+                isRemoved: false,
+                psrentId: toggleReplyBox._id
+            }
+            await onPostCommentReply(body);
+            textArea.current.value = "";
+        } catch (error) {
+        } finally {
+            getComments();
+        }
+    }
+
+    const openReplyBox = (comment) => {
+        if (toggleReplyBox) setToggleReplyBox(null);
+        else setToggleReplyBox(comment)
     }
 
 
@@ -48,17 +77,24 @@ const Comments = ({ postId, showTextArea }) => {
                 ) : (
                     commentsList && commentsList.length > 0 ? (
                         React.Children.toArray(
-                            commentsList.map(comment => {
-                                return(
-                                    <p className="comment">{comment}</p>
+                            commentsList.map(singleComment => {
+                                return (
+                                    <Comment comment={singleComment} toggleReplyBoxOpen={openReplyBox} />
                                 )
                             })
                         )
-                    ): (
+                    ) : (
                         <p>Post does not have any comments yet</p>
                     )
                 )
             }
+
+            {toggleReplyBox && (
+                <section className="comment-post">
+                    <textarea placeholder="Write your reply" ref={textAreaReply}></textarea>
+                    <button onClick={postCommentReply}>REPLY</button>
+                </section>
+            )}
         </div>
     )
 };

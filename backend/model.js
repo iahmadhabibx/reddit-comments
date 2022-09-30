@@ -5,9 +5,9 @@ const commentsSchema = new Schema({
     comment: String,
     postId: String,
     postedBy: String,
-    hasChildren: Boolean,
-    children: Array,
-    isRemoved: Boolean
+    children: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+    isRemoved: Boolean,
+    psrentId: { type: Schema.Types.ObjectId, ref: "Comment" }
 });
 
 const Comment = mongoose.model('Comment', commentsSchema);
