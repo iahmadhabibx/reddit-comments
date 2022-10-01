@@ -43,22 +43,21 @@ const Comments = ({ postId, showTextArea, toggleCommentBox }) => {
 
     const postCommentReply = async () => {
         try {
-            if (textArea.current.value == "")
+            if (textAreaReply.current.value == "")
                 return alert("Enter something in your comment");
             const body = {
-                comment: textArea.current.value,
+                comment: textAreaReply.current.value,
                 postId,
                 postedBy: "Guest",
                 children: [],
                 isRemoved: false,
-                psrentId: toggleReplyBox._id
+                parentId: toggleReplyBox._id
             }
             await onPostCommentReply(body);
-            textArea.current.value = "";
+            textAreaReply.current.value = "";
             toggleCommentBox();
         } catch (error) {
-        } finally {
-            getComments();
+            console.log("error", error);
         }
     }
 
@@ -67,6 +66,19 @@ const Comments = ({ postId, showTextArea, toggleCommentBox }) => {
         else setToggleReplyBox(comment)
     }
 
+    const commentsLoop = (comment) => {
+        return React.Children.toArray(
+            comment.map(singleComment => {
+                if (singleComment.children.length > 0) {
+                    return ([
+                        <Comment comment={singleComment} toggleReplyBoxOpen={openReplyBox} />,
+                        commentsLoop(singleComment.children)])
+                }
+                else return <Comment comment={singleComment} toggleReplyBoxOpen={openReplyBox} />
+            })
+        )
+
+    }
 
     return (
         <div>
@@ -78,13 +90,7 @@ const Comments = ({ postId, showTextArea, toggleCommentBox }) => {
                     </section>
                 ) : (
                     commentsList && commentsList.length > 0 ? (
-                        React.Children.toArray(
-                            commentsList.map(singleComment => {
-                                return (
-                                    <Comment comment={singleComment} toggleReplyBoxOpen={openReplyBox} />
-                                )
-                            })
-                        )
+                        commentsLoop(commentsList)
                     ) : (
                         <p>Post does not have any comments yet</p>
                     )

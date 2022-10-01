@@ -34,7 +34,7 @@ app.post("/comment/reply", async (req, res, next) => {
         await updateComment(comment.parentId, results);
         res.status(200).send({ message: "Posted" })
     } catch (error) {
-        res.status(400).send({ message: "Error while adding" })
+        res.status(400).send({ message: "Error while adding", error })
     }
 });
 
@@ -43,10 +43,10 @@ app.get("/comments", async (req, res, next) => {
         res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
         res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-        const comments = await Comment.find().populate("children");
+        const comments = await Comment.find({parentId: null}).populate("children");
         res.status(200).send(comments);
     } catch (error) {
-        res.status(400).send({ message: "Error while getting" })
+        res.status(400).send({ message: "Error while getting", error })
     }
 });
 

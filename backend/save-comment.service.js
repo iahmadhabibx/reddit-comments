@@ -14,11 +14,12 @@ const commentSave = async (comment) => {
 const updateComment = async (parentId, childComment) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const doc = await Comment.findByIdAndUpdate(parentId,
+            const doc = await Comment.findOneAndUpdate({ _id: parentId },
                 { $push: { children: childComment._id } }, { new: true }
             );
             resolve(doc);
         } catch (error) {
+            console.log(JSON.stringify(error));
             reject(error)
         }
     })
