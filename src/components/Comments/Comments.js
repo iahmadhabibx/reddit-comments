@@ -22,7 +22,7 @@ const Comments = ({ postId, showTextArea, toggleCommentBox }) => {
 
     const postComment = async () => {
         try {
-            if (textArea.current.value == "")
+            if (textArea.current.value === "")
                 return alert("Enter something in your comment");
             const body = {
                 comment: textArea.current.value,
@@ -30,7 +30,8 @@ const Comments = ({ postId, showTextArea, toggleCommentBox }) => {
                 postedBy: "Guest",
                 children: [],
                 isRemoved: false,
-                parentId: null
+                parentId: null,
+                nestLevel: 0
             }
             await onPostComment(body);
             textArea.current.value = "";
@@ -43,7 +44,7 @@ const Comments = ({ postId, showTextArea, toggleCommentBox }) => {
 
     const postCommentReply = async () => {
         try {
-            if (textAreaReply.current.value == "")
+            if (textAreaReply.current.value === "")
                 return alert("Enter something in your comment");
             const body = {
                 comment: textAreaReply.current.value,
@@ -51,11 +52,12 @@ const Comments = ({ postId, showTextArea, toggleCommentBox }) => {
                 postedBy: "Guest",
                 children: [],
                 isRemoved: false,
-                parentId: toggleReplyBox._id
+                parentId: toggleReplyBox._id,
+                nestLevel: Number(toggleReplyBox.nestLevel) + 1
             }
             await onPostCommentReply(body);
             textAreaReply.current.value = "";
-            toggleCommentBox();
+            toggleReplyBox();
         } catch (error) {
             console.log("error", error);
         }
@@ -69,6 +71,7 @@ const Comments = ({ postId, showTextArea, toggleCommentBox }) => {
     const commentsLoop = (comment) => {
         return React.Children.toArray(
             comment.map(singleComment => {
+                console.log("singleComment", singleComment);
                 if (singleComment.children.length > 0) {
                     return ([
                         <Comment comment={singleComment} toggleReplyBoxOpen={openReplyBox} />,

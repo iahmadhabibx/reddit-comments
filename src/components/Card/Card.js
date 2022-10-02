@@ -8,7 +8,7 @@ const Card = ({ post }) => {
     return (
         <div className="card">
             <header>
-                <img className="card-img" src={post.user.img} />
+                <img className="card-img" src={post.user.img} alt="Cat" />
                 <div className="card-title">{post.title}</div>
             </header>
             <aside>

@@ -43,7 +43,13 @@ app.get("/comments", async (req, res, next) => {
         res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
         res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-        const comments = await Comment.find({parentId: null}).populate("children");
+        const comments = await Comment.find({parentId: null}).populate({ 
+            path: 'children',
+            populate: {
+              path: 'children',
+              model: 'Comment'
+            } 
+         })
         res.status(200).send(comments);
     } catch (error) {
         res.status(400).send({ message: "Error while getting", error })

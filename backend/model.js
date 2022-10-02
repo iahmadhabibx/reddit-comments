@@ -7,7 +7,8 @@ const commentsSchema = new Schema({
     postedBy: String,
     children: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
     isRemoved: Boolean,
-    parentId: { type: Schema.Types.ObjectId, ref: "Comment" }
+    parentId: { type: Schema.Types.ObjectId, ref: "Comment" },
+    nestLevel: Number
 });
 
 const Comment = mongoose.model('Comment', commentsSchema);
