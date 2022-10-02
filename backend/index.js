@@ -2,8 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
+require("dotenv").config();
 
-mongoose.connect("mongodb://localhost/Reddit").then(res => console.log('Connected to DB')).catch(err => console.log('Error in DB'))
+mongoose.connect(process.env.CONNECTION_STRING).then(res => console.log('Connected to DB')).catch(err => console.log('Error in DB'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ origin: '*' }));
@@ -55,7 +56,7 @@ app.get("/comments", async (req, res, next) => {
         res.status(400).send({ message: "Error while getting", error })
     }
 });
-
-app.listen(8000, () => {
-    console.log('Listening to port 8000');
+const PORT = process.env.PORT | 8000
+app.listen(PORT, () => {
+    console.log(`Listening to port ${PORT}`);
 })
